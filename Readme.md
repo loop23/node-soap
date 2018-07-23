@@ -48,6 +48,7 @@ This module lets you connect to web services using SOAP.  It also provides a ser
   - [ClientSSLSecurityPFX](#clientsslsecuritypfx)
   - [WSSecurity](#wssecurity)
   - [WSSecurityCert](#wssecuritycert)
+  - [WSSecurityCertSSL] (#wssecuritycertssl)
   - [NTLMSecurity](#ntlmsecurity)
 - [Handling XML Attributes, Value and XML (wsdlOptions).](#handling-xml-attributes-value-and-xml-wsdloptions)
   - [Overriding the `value` key](#overriding-the-value-key)
@@ -681,7 +682,7 @@ as default request options to the constructor:
 * `strictSSL: false`
 * `secureOptions: constants.SSL_OP_NO_TLSv1_2` (this is likely needed for node >= 10.0)
 
-If you want to reuse tls sessions, you can use the option `forever: true`. 
+If you want to reuse tls sessions, you can use the option `forever: true`.
 
 ``` javascript
 client.setSecurity(new soap.ClientSSLSecurity(
@@ -707,7 +708,7 @@ as default request options to the constructor:
 * `strictSSL: false`
 * `secureOptions: constants.SSL_OP_NO_TLSv1_2` (this is likely needed for node >= 10.0)
 
-If you want to reuse tls sessions, you can use the option `forever: true`. 
+If you want to reuse tls sessions, you can use the option `forever: true`.
 
 ``` javascript
 client.setSecurity(new soap.ClientSSLSecurityPFX(
@@ -753,6 +754,18 @@ WS-Security X509 Certificate support.
   var password = ''; // optional password
   var wsSecurity = new soap.WSSecurityCert(privateKey, publicKey, password);
   client.setSecurity(wsSecurity);
+```
+
+### WSSecurityCertSSL
+
+WS-Security X509 Certificate support + SSL connection; This is a nasty hack which I needed.
+
+``` javascript
+  var privateKey = fs.readFileSync(privateKeyPath);
+  var publicKey = fs.readFileSync(publicKeyPath);
+  var password = ''; // optional password
+  var wsSecuritySsl = new soap.WSSecurityCertSSL(privateKey, publicKey, '', process.env.CERT_PRIVATE_KEY, process.env.CERT_CRT);
+  client.setSecurity(wsSecuritySsl);
 ```
 
 ### NTLMSecurity
